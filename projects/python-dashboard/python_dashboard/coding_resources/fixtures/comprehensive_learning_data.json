@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-01-01",
+  "maintainer": "Backend Team",
+  "categories": [
+    {
+      "id": "python_core",
+      "name": "Python Core",
+      "description": "Core Python concepts required for backend and system development",
+      "metadata": {
+        "difficulty": "Beginner → Advanced",
+        "used_in_production": true,
+        "soft_delete_safe": true
+      },
+      "topics": [
+        {
+          "id": "python_oop",
+          "title": "Object Oriented Programming",
+          "description": "OOP principles used in Django models, services, and APIs",
+          "concepts": [
+            {
+              "name": "Encapsulation",
+              "explanation": "Restricting direct access to object data and exposing controlled interfaces",
+              "real_world_usage": "Used in Django model methods instead of direct field access",
+              "best_practices": [
+                "Use methods instead of accessing fields directly",
+                "Validate data at object level"
+              ],
+              "anti_patterns": [
+                "Publicly mutating model fields everywhere",
+                "Business logic inside views"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Encapsulation Example",
+                  "language": "python",
+                  "code": "class User:\\n    def __init__(self, email):\\n        self._email = email\\n\\n    def get_email(self):\\n        return self._email\\n\\n    def set_email(self, email):\\n        if '@' not in email:\\n            raise ValueError('Invalid email')\\n        self._email = email",
+                  "notes": "This pattern is used heavily in Django service layers"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "django_backend",
+      "name": "Django Backend",
+      "description": "Backend development using Django and Django REST Framework",
+      "metadata": {
+        "difficulty": "Intermediate → Advanced",
+        "used_in_production": true,
+        "soft_delete_safe": true
+      },
+      "topics": [
+        {
+          "id": "django_models",
+          "title": "Django Models",
+          "description": "Data modeling and ORM behavior",
+          "concepts": [
+            {
+              "name": "Soft Delete Pattern",
+              "explanation": "Data is never physically deleted; instead marked inactive",
+              "real_world_usage": "Critical for audit logs and recovery",
+              "best_practices": [
+                "Never hard delete business data",
+                "Always track deleted_at timestamps"
+              ],
+              "anti_patterns": [
+                "Using .delete() in production APIs"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Soft Delete Model",
+                  "language": "python",
+                  "code": "class Category(models.Model):\\n    name = models.CharField(max_length=100, unique=True)\\n    is_deleted = models.BooleanField(default=False)\\n    deleted_at = models.DateTimeField(null=True, blank=True)\\n\\n    def soft_delete(self):\\n        self.is_deleted = True\\n        self.deleted_at = timezone.now()\\n        self.save()\\n\\n    def restore(self):\\n        self.is_deleted = False\\n        self.deleted_at = None\\n        self.save()",
+                  "notes": "This allows restoring categories even after deletion"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "api_engineering",
+      "name": "API Engineering",
+      "description": "Designing scalable and safe REST APIs",
+      "metadata": {
+        "difficulty": "Advanced",
+        "used_in_production": true,
+        "soft_delete_safe": true
+      },
+      "topics": [
+        {
+          "id": "rest_best_practices",
+          "title": "REST Best Practices",
+          "concepts": [
+            {
+              "name": "Versioned APIs",
+              "explanation": "APIs should never break clients",
+              "real_world_usage": "Used in all production systems",
+              "best_practices": [
+                "Use /api/v1/",
+                "Never modify existing response formats"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Versioned URL",
+                  "language": "python",
+                  "code": "urlpatterns = [\\n    path('api/v1/categories/', CategoryViewSet.as_view())\\n]",
+                  "notes": "Allows future v2 APIs without breaking clients"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

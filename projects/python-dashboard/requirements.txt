@@ -1,0 +1,4 @@
+# Python Django Dashboard Requirements
+Django>=4.2.0
+djangorestframework>=3.14.0
+

@@ -1,0 +1,5 @@
+# DevOps Dashboard Requirements
+# No Python dependencies required - uses shell/PowerShell scripts
+# Optional: for Python-based monitoring
+psutil>=5.9.0
+

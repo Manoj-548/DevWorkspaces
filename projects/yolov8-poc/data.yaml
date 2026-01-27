@@ -1,0 +1,10 @@
+# YOLO dataset configuration
+path: .
+train: train/images
+val: test/images
+
+# Number of classes
+nc: 1
+
+# Class names
+names: ['object']
