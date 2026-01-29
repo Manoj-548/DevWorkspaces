@@ -1,7 +1,7 @@
 {
-  "version": "1.0.0",
-  "last_updated": "2026-01-01",
-  "maintainer": "Backend Team",
+  "version": "2.0.0",
+  "last_updated": "2024-01-15",
+  "maintainer": "AI/ML Development Team",
   "categories": [
     {
       "id": "python_core",
@@ -83,33 +83,525 @@
       ]
     },
     {
-      "id": "api_engineering",
-      "name": "API Engineering",
-      "description": "Designing scalable and safe REST APIs",
+      "id": "ai_ml_fundamentals",
+      "name": "AI/ML Fundamentals",
+      "description": "Core concepts in Artificial Intelligence and Machine Learning",
       "metadata": {
-        "difficulty": "Advanced",
+        "difficulty": "Beginner → Intermediate",
         "used_in_production": true,
-        "soft_delete_safe": true
+        "research_active": true
       },
       "topics": [
         {
-          "id": "rest_best_practices",
-          "title": "REST Best Practices",
+          "id": "ml_basics",
+          "title": "Machine Learning Basics",
+          "description": "Fundamental concepts and algorithms in ML",
           "concepts": [
             {
-              "name": "Versioned APIs",
-              "explanation": "APIs should never break clients",
-              "real_world_usage": "Used in all production systems",
+              "name": "Supervised Learning",
+              "explanation": "Learning from labeled data to make predictions",
+              "real_world_usage": "Used in recommendation systems, spam detection, price prediction",
               "best_practices": [
-                "Use /api/v1/",
-                "Never modify existing response formats"
+                "Ensure data quality and quantity",
+                "Split data into train/validation/test sets",
+                "Handle class imbalance",
+                "Use cross-validation for model evaluation"
+              ],
+              "anti_patterns": [
+                "Training on test data",
+                "Ignoring data preprocessing",
+                "Overfitting to validation set"
               ],
               "code_snippets": [
                 {
-                  "title": "Versioned URL",
+                  "title": "Basic ML Pipeline",
                   "language": "python",
-                  "code": "urlpatterns = [\\n    path('api/v1/categories/', CategoryViewSet.as_view())\\n]",
-                  "notes": "Allows future v2 APIs without breaking clients"
+                  "code": "from sklearn.model_selection import train_test_split\\nfrom sklearn.linear_model import LogisticRegression\\nfrom sklearn.metrics import accuracy_score\\n\\n# Load and split data\\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)\\n\\n# Train model\\nmodel = LogisticRegression()\\nmodel.fit(X_train, y_train)\\n\\n# Evaluate\\npredictions = model.predict(X_test)\\nprint(f'Accuracy: {accuracy_score(y_test, predictions):.3f}')",
+                  "notes": "Basic pipeline for any supervised learning task"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "linear_algebra",
+          "title": "Linear Algebra for ML",
+          "description": "Mathematical foundations including vectors, matrices, eigenvalues",
+          "concepts": [
+            {
+              "name": "Matrix Operations",
+              "explanation": "Essential operations for understanding neural networks",
+              "real_world_usage": "Used in all deep learning computations",
+              "best_practices": [
+                "Master matrix multiplication and transformations",
+                "Understand eigendecomposition and SVD"
+              ],
+              "anti_patterns": [
+                "Memorizing formulas without understanding"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Matrix Operations with NumPy",
+                  "language": "python",
+                  "code": "import numpy as np\\n\\n# Matrix multiplication\\nA = np.array([[1, 2], [3, 4]])\\nB = np.array([[5, 6], [7, 8]])\\nC = np.dot(A, B)\\nprint('Matrix multiplication result:')\\nprint(C)",
+                  "notes": "NumPy is fundamental for ML computations"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "deep_learning",
+      "name": "Deep Learning",
+      "description": "Neural networks, architectures, and training techniques",
+      "metadata": {
+        "difficulty": "Intermediate → Advanced",
+        "used_in_production": true,
+        "research_active": true
+      },
+      "topics": [
+        {
+          "id": "neural_networks",
+          "title": "Neural Networks Fundamentals",
+          "description": "Building blocks of deep learning",
+          "concepts": [
+            {
+              "name": "Backpropagation",
+              "explanation": "Algorithm for training neural networks through gradient descent",
+              "real_world_usage": "Core algorithm behind all deep learning models",
+              "best_practices": [
+                "Use appropriate activation functions",
+                "Initialize weights properly",
+                "Monitor gradient flow"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Simple Neural Network with PyTorch",
+                  "language": "python",
+                  "code": "import torch\\nimport torch.nn as nn\\n\\nclass SimpleNN(nn.Module):\\n    def __init__(self, input_size, hidden_size, output_size):\\n        super().__init__()\\n        self.fc1 = nn.Linear(input_size, hidden_size)\\n        self.relu = nn.ReLU()\\n        self.fc2 = nn.Linear(hidden_size, output_size)\\n    \\n    def forward(self, x):\\n        x = self.fc1(x)\\n        x = self.relu(x)\\n        x = self.fc2(x)\\n        return x\\n\\n# Usage\\nmodel = SimpleNN(784, 128, 10)",
+                  "notes": "PyTorch makes implementing neural networks intuitive"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "transformers",
+          "title": "Transformer Architecture",
+          "description": "Attention-based architecture revolutionizing NLP and beyond",
+          "concepts": [
+            {
+              "name": "Attention Mechanism",
+              "explanation": "Allows models to focus on relevant parts of input",
+              "real_world_usage": "Powers GPT, BERT, and modern language models",
+              "best_practices": [
+                "Use positional encodings",
+                "Implement multi-head attention",
+                "Apply layer normalization"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Multi-Head Attention Implementation",
+                  "language": "python",
+                  "code": "class MultiHeadAttention(nn.Module):\\n    def __init__(self, d_model, num_heads):\\n        super().__init__()\\n        self.num_heads = num_heads\\n        self.d_k = d_model // num_heads\\n        \\n        self.W_q = nn.Linear(d_model, d_model)\\n        self.W_k = nn.Linear(d_model, d_model)\\n        self.W_v = nn.Linear(d_model, d_model)\\n        self.W_o = nn.Linear(d_model, d_model)\\n    \\n    def forward(self, query, key, value):\\n        batch_size = query.size(0)\\n        Q = self.W_q(query).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)\\n        K = self.W_k(key).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)\\n        V = self.W_v(value).view(batch_size, -1, self.num_heads, self.d_k).transpose(1, 2)\\n        \\n        scores = torch.matmul(Q, K.transpose(-2, -1)) / (self.d_k ** 0.5)\\n        attention = torch.softmax(scores, dim=-1)\\n        context = torch.matmul(attention, V)\\n        return self.W_o(context.transpose(1, 2).contiguous().view(batch_size, -1, d_model))",
+                  "notes": "Core component of Transformer models"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "computer_vision",
+      "name": "Computer Vision",
+      "description": "Image processing, CNNs, and end-to-end CV projects",
+      "metadata": {
+        "difficulty": "Intermediate → Advanced",
+        "used_in_production": true,
+        "research_active": true
+      },
+      "topics": [
+        {
+          "id": "cnn_fundamentals",
+          "title": "Convolutional Neural Networks",
+          "description": "Core architecture for computer vision tasks",
+          "concepts": [
+            {
+              "name": "CNN Architecture",
+              "explanation": "Feature extraction through local receptive fields",
+              "real_world_usage": "Image classification, object detection, segmentation",
+              "best_practices": [
+                "Use appropriate kernel sizes",
+                "Implement pooling for downsampling",
+                "Apply batch normalization"
+              ],
+              "code_snippets": [
+                {
+                  "title": "CNN for Image Classification",
+                  "language": "python",
+                  "code": "import torch.nn as nn\\n\\nclass CNNClassifier(nn.Module):\\n    def __init__(self, num_classes=10):\\n        super().__init__()\\n        self.features = nn.Sequential(\\n            nn.Conv2d(3, 64, kernel_size=3, padding=1),\\n            nn.ReLU(),\\n            nn.MaxPool2d(2),\\n            nn.Conv2d(64, 128, kernel_size=3, padding=1),\\n            nn.ReLU(),\\n            nn.MaxPool2d(2),\\n            nn.AdaptiveAvgPool2d((1, 1))\\n        )\\n        self.classifier = nn.Linear(128, num_classes)\\n    \\n    def forward(self, x):\\n        x = self.features(x)\\n        x = x.view(x.size(0), -1)\\n        x = self.classifier(x)\\n        return x",
+                  "notes": "Basic CNN architecture for classification tasks"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "yolo_object_detection",
+          "title": "YOLO Object Detection",
+          "description": "End-to-end object detection pipeline",
+          "concepts": [
+            {
+              "name": "YOLOv8 Pipeline",
+              "explanation": "Real-time object detection with complete workflow",
+              "real_world_usage": "Autonomous vehicles, security systems, retail analytics",
+              "best_practices": [
+                "Use data augmentation extensively",
+                "Implement proper evaluation metrics (mAP)",
+                "Use transfer learning from pre-trained models"
+              ],
+              "code_snippets": [
+                {
+                  "title": "YOLOv8 Object Detection",
+                  "language": "python",
+                  "code": "from ultralytics import YOLO\\n\\n# Load pre-trained model\\nmodel = YOLO('yolov8n.pt')\\n\\n# Train on custom dataset\\nmodel.train(data='data.yaml', epochs=100, imgsz=640, batch=16)\\n\\n# Validate\\nmodel.val()\\n\\n# Predict on new images\\nresults = model.predict('test_images/', save=True)\\n\\n# Export for deployment\\nmodel.export(format='onnx')",
+                  "notes": "Complete pipeline using YOLOv8 for object detection"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nlp",
+      "name": "Natural Language Processing",
+      "description": "Text processing, transformers, and end-to-end NLP projects",
+      "metadata": {
+        "difficulty": "Intermediate → Advanced",
+        "used_in_production": true,
+        "research_active": true
+      },
+      "topics": [
+        {
+          "id": "text_preprocessing",
+          "title": "Text Preprocessing and Tokenization",
+          "description": "Preparing text data for NLP models",
+          "concepts": [
+            {
+              "name": "Tokenization Strategies",
+              "explanation": "Converting text into tokens for model input",
+              "real_world_usage": "Foundation for all NLP pipelines",
+              "best_practices": [
+                "Handle out-of-vocabulary words",
+                "Use subword tokenization for unknown words"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Advanced Tokenization with Transformers",
+                  "language": "python",
+                  "code": "from transformers import AutoTokenizer\\n\\n# Load tokenizer\\ntokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')\\n\\n# Tokenize text\\ntext = \"Hello, how are you doing today?\"\\ntokens = tokenizer.tokenize(text)\\nencoded = tokenizer.encode(text, add_special_tokens=True)\\ndecoded = tokenizer.decode(encoded)\\nprint(f'Tokens: {tokens}')",
+                  "notes": "Transformers library provides robust tokenization"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bert_classification",
+          "title": "BERT Text Classification",
+          "description": "Complete pipeline for text classification",
+          "concepts": [
+            {
+              "name": "Fine-tuning BERT",
+              "explanation": "Adapting pre-trained BERT for specific tasks",
+              "real_world_usage": "Sentiment analysis, spam detection, topic classification",
+              "best_practices": [
+                "Use pre-trained embeddings or models",
+                "Handle class imbalance",
+                "Implement proper evaluation metrics"
+              ],
+              "code_snippets": [
+                {
+                  "title": "BERT Fine-tuning Pipeline",
+                  "language": "python",
+                  "code": "from transformers import AutoTokenizer, AutoModelForSequenceClassification\\nimport torch\\n\\n# Load model and tokenizer\\ntokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')\\nmodel = AutoModelForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)\\n\\n# Encode text\\ninputs = tokenizer(text, return_tensors='pt', padding=True, truncation=True)\\noutputs = model(**inputs)\\npredictions = torch.argmax(outputs.logits, dim=1)",
+                  "notes": "Complete BERT fine-tuning pipeline for text classification"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "algorithms",
+      "name": "Algorithms and Data Structures",
+      "description": "Essential algorithms for ML/DL and optimization",
+      "metadata": {
+        "difficulty": "Intermediate → Advanced",
+        "used_in_production": true,
+        "research_active": false
+      },
+      "topics": [
+        {
+          "id": "optimization",
+          "title": "Optimization Algorithms",
+          "description": "Gradient descent variants and optimization techniques",
+          "concepts": [
+            {
+              "name": "Advanced Optimizers",
+              "explanation": "Beyond basic gradient descent for faster convergence",
+              "real_world_usage": "Training all deep learning models",
+              "best_practices": [
+                "Use Adam for most applications",
+                "Implement learning rate scheduling",
+                "Use gradient clipping for stability"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Advanced Optimizers Comparison",
+                  "language": "python",
+                  "code": "from torch.optim import SGD, Adam, AdamW\\nfrom torch.optim.lr_scheduler import CosineAnnealingLR\\n\\n# Different optimizers\\noptimizers = {\\n    'SGD': SGD(model.parameters(), lr=0.01, momentum=0.9),\\n    'Adam': Adam(model.parameters(), lr=0.001),\\n    'AdamW': AdamW(model.parameters(), lr=0.001, weight_decay=0.01)\\n}\\n\\n# Learning rate scheduler\\nscheduler = CosineAnnealingLR(optimizer, T_max=100)",
+                  "notes": "Modern optimization techniques for stable training"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fullstack_dev",
+      "name": "Full Stack Development",
+      "description": "Frontend, backend, and deployment for AI applications",
+      "metadata": {
+        "difficulty": "Intermediate → Advanced",
+        "used_in_production": true,
+        "research_active": false
+      },
+      "topics": [
+        {
+          "id": "streamlit_dashboard",
+          "title": "Streamlit for ML Dashboards",
+          "description": "Building interactive ML dashboards with Streamlit",
+          "concepts": [
+            {
+              "name": "Streamlit Basics",
+              "explanation": "Quick deployment of ML models as web apps",
+              "real_world_usage": "Model visualization, data exploration, demo applications",
+              "best_practices": [
+                "Use caching for expensive computations",
+                "Organize layout with columns and containers"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Streamlit ML Dashboard",
+                  "language": "python",
+                  "code": "import streamlit as st\\nimport torch\\n\\n# Load model\\n@st.cache_resource\\ndef load_model():\\n    return torch.load('model.pth')\\n\\nmodel = load_model()\\n\\n# UI components\\nst.title('ML Model Dashboard')\\ninput_data = st.text_input('Enter input:')\\nif st.button('Predict'):\\n    prediction = model.predict(input_data)\\n    st.success(f'Prediction: {prediction}')",
+                  "notes": "Streamlit enables rapid ML dashboard development"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "api_deployment",
+          "title": "FastAPI for ML APIs",
+          "description": "Building high-performance APIs for ML models",
+          "concepts": [
+            {
+              "name": "FastAPI ML Endpoint",
+              "explanation": "Production-ready API for model serving",
+              "real_world_usage": "Model serving, microservice architecture",
+              "best_practices": [
+                "Use Pydantic models for validation",
+                "Implement async endpoints",
+                "Add proper error handling"
+              ],
+              "code_snippets": [
+                {
+                  "title": "FastAPI ML Endpoint",
+                  "language": "python",
+                  "code": "from fastapi import FastAPI\\nfrom pydantic import BaseModel\\nfrom model import predict\\n\\napp = FastAPI()\\n\\nclass InputData(BaseModel):\\n    text: str\\n\\n@app.post('/predict')\\nasync def predict_sentiment(data: InputData):\\n    result = predict(data.text)\\n    return {'prediction': result}\\n\\n# Run with: uvicorn main:app --reload",
+                  "notes": "FastAPI provides excellent performance for ML APIs"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "devops_iac",
+      "name": "DevOps and Infrastructure as Code",
+      "description": "MLOps, containerization, cloud deployment, and automation",
+      "metadata": {
+        "difficulty": "Intermediate → Advanced",
+        "used_in_production": true,
+        "research_active": true
+      },
+      "topics": [
+        {
+          "id": "docker_ml",
+          "title": "Docker for ML Applications",
+          "description": "Containerizing ML models and applications",
+          "concepts": [
+            {
+              "name": "Docker ML Container",
+              "explanation": "Packaging ML models with all dependencies",
+              "real_world_usage": "Reproducible deployments, cloud scaling",
+              "best_practices": [
+                "Use multi-stage builds for smaller images",
+                "Pin dependency versions",
+                "Include health checks"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Dockerfile for ML Application",
+                  "language": "dockerfile",
+                  "code": "# Multi-stage build\\nFROM python:3.9-slim AS builder\\nWORKDIR /app\\nCOPY requirements.txt .\\nRUN pip install --no-cache-dir -r requirements.txt\\n\\nFROM python:3.9-slim\\nWORKDIR /app\\nCOPY --from=builder /app /app\\nCOPY model/ ./model/\\n\\nEXPOSE 8000\\nCMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]",
+                  "notes": "Multi-stage builds reduce image size significantly"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mlops",
+          "title": "MLOps Best Practices",
+          "description": "Operationalizing ML workflows",
+          "concepts": [
+            {
+              "name": "ML Pipeline Automation",
+              "explanation": "End-to-end ML workflow automation",
+              "real_world_usage": "Continuous training, model monitoring, automated retraining",
+              "best_practices": [
+                "Version both code and data",
+                "Implement model registry",
+                "Monitor model performance in production"
+              ],
+              "code_snippets": [
+                {
+                  "title": "ML Pipeline with MLflow",
+                  "language": "python",
+                  "code": "import mlflow\\nimport mlflow.pytorch\\n\\n# Start MLflow tracking\\nmlflow.set_tracking_uri('http://localhost:5000')\\nmlflow.set_experiment('my_experiment')\\n\\nwith mlflow.start_run():\\n    # Log parameters\\n    mlflow.log_param('learning_rate', 0.001)\\n    mlflow.log_param('epochs', 100)\\n    \\n    # Train model\\n    model = train_model()\\n    \\n    # Log model\\n    mlflow.pytorch.log_model(model, 'model')\\n    \\n    # Log metrics\\n    mlflow.log_metric('accuracy', 0.95)",
+                  "notes": "MLflow provides comprehensive experiment tracking"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "kubernetes_ml",
+          "title": "Kubernetes for ML",
+          "description": "Orchestrating ML workloads at scale",
+          "concepts": [
+            {
+              "name": "K8s Deployment for ML",
+              "explanation": "Scaling ML inference in production",
+              "real_world_usage": "High-availability model serving, auto-scaling",
+              "best_practices": [
+                "Use horizontal pod autoscaling",
+                "Implement resource limits",
+                "Use ConfigMaps for configuration"
+              ],
+              "code_snippets": [
+                {
+                  "title": "K8s Deployment for ML Model",
+                  "language": "yaml",
+                  "code": "apiVersion: apps/v1\\nkind: Deployment\\nmetadata:\\n  name: ml-model-deployment\\nspec:\\n  replicas: 3\\n  selector:\\n    matchLabels:\\n      app: ml-model\\n  template:\\n    metadata:\\n      labels:\\n        app: ml-model\\n    spec:\\n      containers:\\n      - name: ml-model\\n        image: my-registry/ml-model:v1\\n        ports:\\n        - containerPort: 8000\\n        resources:\\n          requests:\\n            memory: \"512Mi\"\\n            cpu: \"500m\"\\n          limits:\\n            memory: \"2Gi\"\\n            cpu: \"2000m\"",
+                  "notes": "HPA enables automatic scaling based on load"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "research_updates",
+      "name": "Research Updates & Methodology",
+      "description": "How to research new advancements and stay updated",
+      "metadata": {
+        "difficulty": "All Levels",
+        "used_in_production": true,
+        "research_active": true
+      },
+      "topics": [
+        {
+          "id": "arxiv_integration",
+          "title": "arXiv Paper Fetcher",
+          "description": "Automated retrieval of latest research papers",
+          "concepts": [
+            {
+              "name": "Paper Retrieval API",
+              "explanation": "Fetching latest papers from arXiv API",
+              "real_world_usage": "Staying updated with latest ML research, paper reviews",
+              "best_practices": [
+                "Filter by categories and keywords",
+                "Sort by submission date",
+                "Cache results for performance"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Fetch Latest Papers from arXiv",
+                  "language": "python",
+                  "code": "import arxiv\\nimport feedparser\\n\\ndef get_latest_papers(query='transformer', max_results=5):\\n    # Using arxiv library\\n    search = arxiv.Search(\\n        query=query,\\n        max_results=max_results,\\n        sort_by=arxiv.SortCriterion.SubmittedDate\\n    )\\n    \\n    papers = []\\n    for result in search.results():\\n        papers.append({\\n            'title': result.title,\\n            'authors': [a.name for a in result.authors],\\n            'summary': result.summary,\\n            'published': result.published,\\n            'url': result.pdf_url\\n        })\\n    \\n    return papers\\n\\n# Alternative: Using feedparser for RSS\\ndef get_papers_via_rss(category='cs.LG', max_items=10):\\n    url = f'http://export.arxiv.org/api/query?search_cat={category}&start=0&max_results={max_items}'\\n    feed = feedparser.parse(url)\\n    return [(entry.title, entry.summary, entry.link) for entry in feed.entries]",
+                  "notes": "arXiv API provides access to latest ML research papers"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "huggingface_trends",
+          "title": "Hugging Face Trends Monitor",
+          "description": "Tracking trending models and datasets",
+          "concepts": [
+            {
+              "name": "Hugging Face API Integration",
+              "explanation": "Monitoring trending models and datasets",
+              "real_world_usage": "Discovering new tools, staying current with state-of-the-art",
+              "best_practices": [
+                "Track model downloads and likes",
+                "Monitor dataset updates",
+                "Follow model cards for best practices"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Fetch Trending Models from Hugging Face",
+                  "language": "python",
+                  "code": "import requests\\n\\ndef get_trending_models(limit=10):\\n    \"\"\"Fetch trending models from Hugging Face\"\"\"\\n    url = f'https://huggingface.co/api/models?sort=downloads&direction=-1&limit={limit}'\\n    response = requests.get(url)\\n    \\n    if response.status_code == 200:\\n        models = response.json()\\n        return [\\n            {\\n                'model_id': m['modelId'],\\n                'downloads': m['downloads'],\\n                'likes': m['likes'],\\n                'pipeline_tag': m.get('pipeline_tag', 'N/A')\\n            }\\n            for m in models\\n        ]\\n    return []\\n\\ndef get_model_card(model_id):\\n    \"\"\"Fetch model card/readme content\"\"\"\\n    url = f'https://huggingface.co/api/models/{model_id}'\\n    response = requests.get(url)\\n    return response.json() if response.status_code == 200 else None",
+                  "notes": "Hugging Face API provides access to trending models and datasets"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "papers_with_code",
+          "title": "PapersWithCode Integration",
+          "description": "Linking papers with implementations",
+          "concepts": [
+            {
+              "name": "Paper-Implementation Tracking",
+              "explanation": "Finding implementations for research papers",
+              "real_world_usage": "Reproducing research, learning new techniques",
+              "best_practices": [
+                "Check task-specific leaderboards",
+                "Compare implementation approaches",
+                "Validate results against papers"
+              ],
+              "code_snippets": [
+                {
+                  "title": "Fetch PapersWithCode Data",
+                  "language": "python",
+                  "code": "import requests\\n\\ndef get_papers_with_code(task='image-classification', limit=5):\\n    \"\"\"Fetch latest papers with implementations for a task\"\"\"\\n    url = f'https://paperswithcode.com/api/v1/papers?task={task}&s=new&limit={limit}'\\n    response = requests.get(url)\\n    \\n    if response.status_code == 200:\\n        data = response.json()\\n        return [\\n            {\\n                'title': p['title'],\\n                'url': p['url'],\\n                'year': p.get('year'),\\n                'code_url': p.get('code_url'),\\n                'datasets': p.get('datasets', [])\\n            }\\n            for p in data.get('results', [])\\n        ]\\n    return []\\n\\ndef get_sota_results(task='image-classification'):\\n    \"\"\"Get state-of-the-art results for a task\"\"\"\\n    url = f'https://paperswithcode.com/api/v1/sota?task={task}'\\n    response = requests.get(url)\\n    \\n    if response.status_code == 200:\\n        return response.json()\\n    return None",
+                  "notes": "PapersWithCode links research papers with their implementations"
                 }
               ]
             }

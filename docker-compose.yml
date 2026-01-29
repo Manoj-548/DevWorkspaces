@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  web:
+    image: python:3.12
+    container_name: dev_web
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: bash -c "pip install --no-cache-dir -r requirements.txt && python manage.py runserver 0.0.0.0:8000"
+    environment:
+      DJANGO_SETTINGS_MODULE: "your_project.settings"
+    depends_on:
+      - postgres
+      - mysql
+      - mongodb
+      - redis
+
+  postgres:
+    image: postgres:15
+    container_name: dev_postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: devdb
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  mysql:
+    image: mysql:8
+    container_name: dev_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: devdb
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  mongodb:
+    image: mongo:6
+    container_name: dev_mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongouser
+      MONGO_INITDB_ROOT_PASSWORD: mongopass
+    volumes:
+      - mongo_data:/data/db
+
+  redis:
+    image: redis:7
+    container_name: dev_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  pg_data:
+  mysql_data:
+  mongo_data:
