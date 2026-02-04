@@ -1,0 +1,25 @@
+<parameter name="content">"""Network Manager Package"""
+from .network_manager import (
+    NetworkManager,
+    NetworkInterface,
+    SSHTunnel,
+    network_manager,
+    get_network_status,
+    test_network_speed,
+    switch_to_best_interface,
+    create_port_forward,
+    close_port_forward
+)
+
+__all__ = [
+    'NetworkManager',
+    'NetworkInterface', 
+    'SSHTunnel',
+    'network_manager',
+    'get_network_status',
+    'test_network_speed',
+    'switch_to_best_interface',
+    'create_port_forward',
+    'close_port_forward'
+]
+</parameter>

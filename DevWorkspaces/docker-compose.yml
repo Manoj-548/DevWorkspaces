@@ -7,6 +7,10 @@ services:
     working_dir: /app
     volumes:
       - .:/app
+      # Mount Windows drives for access within container
+      - /mnt/c:/host/c:ro  # Read-only mount of C drive
+      - /mnt/d:/host/d     # Read-write mount of D drive for new storage
+      - /backups:/host/backups  # SSD backup directory
     ports:
       - "8000:8000"
     command: bash -c "pip install --no-cache-dir -r requirements.txt && python manage.py runserver 0.0.0.0:8000"
@@ -28,7 +32,7 @@ services:
       POSTGRES_PASSWORD: devpass
       POSTGRES_DB: devdb
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - /data/postgres:/var/lib/postgresql/data
 
   mysql:
     image: mysql:8
@@ -41,7 +45,7 @@ services:
       MYSQL_USER: devuser
       MYSQL_PASSWORD: devpass
     volumes:
-      - mysql_data:/var/lib/mysql
+      - /data/mysql:/var/lib/mysql
 
   mongodb:
     image: mongo:6
@@ -52,15 +56,16 @@ services:
       MONGO_INITDB_ROOT_USERNAME: mongouser
       MONGO_INITDB_ROOT_PASSWORD: mongopass
     volumes:
-      - mongo_data:/data/db
+      - /data/mongodb:/data/db
 
   redis:
     image: redis:7
     container_name: dev_redis
     ports:
       - "6379:6379"
+    volumes:
+      - /data/redis:/data
 
 volumes:
-  pg_data:
-  mysql_data:
-  mongo_data:
+  # Named volumes removed - now using SSD bind mounts at /data/*
+  # Database data is stored on SSD at /data/postgres, /data/mysql, etc.

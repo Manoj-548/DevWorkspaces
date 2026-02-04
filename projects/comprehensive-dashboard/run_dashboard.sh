@@ -1,46 +1,82 @@
 #!/bin/bash
+set -e
 
-# Comprehensive DevWorkspaces Dashboard Launcher
-# This script sets up and runs the comprehensive monitoring dashboard
+echo "🚀 DevWorkspaces Dashboard Runner"
+echo "=================================="
 
-echo "🚀 Starting DevWorkspaces Comprehensive Dashboard"
-echo "================================================="
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Check for Redis
+if ! command_exists redis-server; then
+    echo -e "${YELLOW}Warning: Redis not found. For real-time features, install Redis:${NC}"
+    echo "  - Ubuntu/Debian: sudo apt install redis-server"
+    echo "  - Or run: docker run -d -p 6379:6379 redis:alpine"
+fi
+
+# Check for Docker
+if command_exists docker; then
+    echo -e "${GREEN}Docker detected. You can run with Docker:${NC}"
+    echo ""
+    echo "  # Build and start all services (including Redis):"
+    echo "  docker-compose up -d --build"
+    echo ""
+    echo "  # View logs:"
+    echo "  docker-compose logs -f realtime-api"
+    echo ""
+    echo "  # Access:"
+    echo "  - Real-time Dashboard: http://localhost:8501"
+    echo "  - WebSocket API: ws://localhost:8765/ws"
+    echo "  - API Docs: http://localhost:8765/api/docs"
+    echo ""
+fi
+
+# Run with Python directly
+echo -e "${GREEN}Running Real-Time Dashboard with Python:${NC}"
+echo ""
+echo "  Starting WebSocket API server on port 8765..."
+echo "  Starting Streamlit dashboard on port 8501..."
+echo ""
+echo "  To start background workers (in a separate terminal):"
+echo "    cd services && python workers/start_workers.py"
+echo ""
+echo "  To start the real-time dashboard:"
+echo "    cd projects/comprehensive-dashboard"
+echo "    streamlit run realtime_dashboard.py"
+echo ""
+echo "  Or use the standard dashboard:"
+echo "    streamlit run app.py"
+echo ""
 
 # Check if we're in the right directory
-if [ ! -f "app.py" ]; then
-    echo "❌ Error: app.py not found. Please run this script from the dashboard directory."
+if [ ! -f "requirements.txt" ]; then
+    echo -e "${RED}Error: requirements.txt not found${NC}"
+    echo "Please run this script from the project root directory"
     exit 1
 fi
 
-# Check if virtual environment exists, create if not
-if [ ! -d "venv" ]; then
-    echo "📦 Creating virtual environment..."
-    python3 -m venv venv
+# Install dependencies if needed
+if ! python3 -c "import streamlit" 2>/dev/null; then
+    echo -e "${YELLOW}Installing dependencies...${NC}"
+    pip install -r requirements.txt
 fi
 
-# Activate virtual environment
-echo "🔧 Activating virtual environment..."
-source venv/bin/activate
-
-# Install/update dependencies
-echo "📥 Installing dependencies..."
-pip install -r requirements.txt
-
-# Check if streamlit is available
-if ! command -v streamlit &> /dev/null; then
-    echo "❌ Error: Streamlit not found. Please check your installation."
-    exit 1
-fi
-
-# Start the dashboard
-echo "🌟 Launching dashboard..."
-echo "📊 Dashboard will be available at: http://localhost:8501"
-echo "🔄 Auto-refresh enabled (30s intervals)"
-echo ""
-echo "Press Ctrl+C to stop the dashboard"
+# Start the real-time dashboard
+echo -e "${GREEN}Starting Real-Time Dashboard...${NC}"
+echo "Press Ctrl+C to stop"
 echo ""
 
-streamlit run app.py --server.port 8501 --server.address 0.0.0.0
-
-# Deactivate virtual environment on exit
-deactivate
+cd projects/comprehensive-dashboard
+exec streamlit run realtime_dashboard.py --server.port=8501 --server.address=0.0.0.0

@@ -68,6 +68,33 @@ if [ -f "manage.py" ]; then
   python manage.py migrate || true
 fi
 
+# Set up storage directories for SSD and D drive
+echo "💾 Setting up storage directories..."
+
+# Create SSD directories for databases and backups
+sudo mkdir -p /data/postgres
+sudo mkdir -p /data/mysql
+sudo mkdir -p /data/mongodb
+sudo mkdir -p /data/redis
+sudo mkdir -p /backups
+
+# Set proper permissions
+sudo chown -R $USER:$USER /data
+sudo chown -R $USER:$USER /backups
+
+# Create D drive archive directory
+if [ -d "/mnt/d" ]; then
+  mkdir -p /mnt/d/ArchiveWorkspaces
+  echo "✅ Created archive directory on D drive: /mnt/d/ArchiveWorkspaces"
+else
+  echo "⚠️ D drive not mounted at /mnt/d - archive storage may not work"
+fi
+
+echo "📊 Storage setup complete!"
+echo "  - SSD (/data): Database storage and backups"
+echo "  - D Drive (/mnt/d): New project archives"
+echo "  - C Drive (/mnt/c): Read-only access (full - use for cleanup)"
+
 echo "=============================="
 echo "✅ Bootstrap complete!"
 echo "Restart terminal if Docker group was added."
